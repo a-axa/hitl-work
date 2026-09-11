@@ -9,28 +9,21 @@ Each `.md` file is an independent system prompt for a single role. The core prin
 ### Via `npx skills` (recommended)
 
 ```bash
-npx skills use https://github.com/iskandar221201/hitl-work --skill hitl-work
-# atau dari file lokal
-npx skills use ./hitl-work.skill
-# atau via GitHub langsung
+# Install permanent ke project (recommended)
+npx skills add "https://github.com/iskandar221201/hitl-work" --skill hitl-work
+
+# Install global (semua project)
+npx skills add "https://github.com/iskandar221201/hitl-work" --skill hitl-work -g
+
+# One-shot tanpa install (inject ke sesi ini saja)
 npx skills use "https://github.com/iskandar221201/hitl-work" --skill hitl-work
-```
-
-### Manual (Claude Code / Opencode)
-
-```bash
-# Claude Code
-claude skills add ./hitl-work.skill
-# Opencode
-opencode skills add ./hitl-work.skill
 ```
 
 ### Verify
 
 ```bash
-# SKILL.md harus valid
-python -c "from pathlib import Path; print(Path('SKILL.md').exists())"
-unzip -l hitl-work.skill | head
+npx skills list          # project-level
+npx skills list -g       # global
 ```
 
 > Skill trigger otomatis saat prompt menyebut: `plan this feature`, `decompose PRD`, `buat prd`, `execute prd.md`, `QA`, `doubt review`, `security review`, `architecture review`, `debug`, `refactor`, `API design` — termasuk padanan Indonesia (`buatin fitur`, `kerjain sesuai prd`, `cek security`) — dan tidak trigger untuk one-liner seperti `commit message`, `cat file`, atau `translate`.
