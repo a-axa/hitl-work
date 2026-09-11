@@ -1,8 +1,6 @@
-# 🧠 Multi-Agent Development Workflow (HITL·Work)
-
-A collection of 16 system prompts for a multi-agent coding workflow: **Decomposer → Planner → Executor → QA**, with specialist agents for review, debugging, refactoring, and documentation.
-
-Each `.md` file is an independent system prompt for a single role. The core principle: **one agent, one responsibility.** The Planner doesn't write code. The Executor doesn't think about architecture. QA trusts nothing without verification. This separation means each agent can run on a cheap/fast model — because its scope is narrow and explicit.
+#Multi-Agent Development Workflow (HITL·Work)
+Most AI coding workflows collapse into one prompt doing everything. HITL·Work splits it: 16 agents, each with a single responsibility — so cheap models can do senior-engineer work.
+Each .md file is an independent system prompt for a single role. One agent, one responsibility. Planner doesn't write code. Executor doesn't think about architecture. QA trusts nothing without verification.
 
 ## 📦 Install as Skill
 
