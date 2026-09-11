@@ -1,0 +1,25 @@
+# dev artifacts — not for publik
+workspace/
+evals/
+tmp/
+*.log
+
+# os / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# node
+node_modules/
+
+# keep .skill tracked for install — don't ignore
+!hitl-work.skill

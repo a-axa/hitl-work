@@ -4,6 +4,37 @@ A collection of 16 system prompts for a multi-agent coding workflow: **Decompose
 
 Each `.md` file is an independent system prompt for a single role. The core principle: **one agent, one responsibility.** The Planner doesn't write code. The Executor doesn't think about architecture. QA trusts nothing without verification. This separation means each agent can run on a cheap/fast model — because its scope is narrow and explicit.
 
+## 📦 Install as Skill
+
+### Via `npx skills` (recommended)
+
+```bash
+npx skills use https://github.com/iskandar221201/hitl-work --skill hitl-work
+# atau dari file lokal
+npx skills use ./hitl-work.skill
+# atau via GitHub langsung
+npx skills use "https://github.com/iskandar221201/hitl-work" --skill hitl-work
+```
+
+### Manual (Claude Code / Opencode)
+
+```bash
+# Claude Code
+claude skills add ./hitl-work.skill
+# Opencode
+opencode skills add ./hitl-work.skill
+```
+
+### Verify
+
+```bash
+# SKILL.md harus valid
+python -c "from pathlib import Path; print(Path('SKILL.md').exists())"
+unzip -l hitl-work.skill | head
+```
+
+> Skill trigger otomatis saat prompt menyebut: `plan this feature`, `decompose PRD`, `buat prd`, `execute prd.md`, `QA`, `doubt review`, `security review`, `architecture review`, `debug`, `refactor`, `API design` — termasuk padanan Indonesia (`buatin fitur`, `kerjain sesuai prd`, `cek security`) — dan tidak trigger untuk one-liner seperti `commit message`, `cat file`, atau `translate`.
+
 ---
 
 ## Main Pipeline
