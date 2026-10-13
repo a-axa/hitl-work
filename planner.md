@@ -339,6 +339,55 @@ Before writing the spec, assess the user experience surface of this change. **Sk
 
 ---
 
+### Step 1.11 — Testability Check
+
+Before writing the spec, design the implementation to be unit-testable by default. This step ensures the Unit Test Writer agent can generate meaningful tests from the markdown spec — not just integration smoke tests.
+
+**Dependency Injection**
+- Does any class or method this feature introduces depend on external services (DB, HTTP client, file system, cache, external API)?
+- If yes → spec those dependencies as injected (constructor injection or method parameter), not instantiated inline.
+- Example: `new HttpClient()` inside a method = untestable. `__construct(HttpClientInterface $client)` = testable.
+
+**Pure Logic Isolation**
+- Is there business logic (calculation, validation, transformation, decision branching) mixed with I/O (DB query, API call, file read)?
+- If yes → spec them in separate methods or classes. Pure logic must be extractable and testable in isolation without mocking.
+- Example: a method that fetches from DB AND calculates a total = untestable without a real DB. Split: `fetchData()` + `calculateTotal(array $data)` = the second is testable with plain array input.
+
+**Side Effects**
+- Does this feature have side effects (sends a notification, writes a file, updates a DB record)?
+- If yes → spec the side-effect trigger as an injected dependency (e.g. `NotificationService`, `StorageService`) so tests can assert it was called without actually executing it.
+
+**Return Values**
+- Do all methods this feature introduces have explicit, typed return values?
+- Void methods with side effects are harder to test — prefer returning a result object or bool that confirms the operation.
+- If a method can fail → it must return a typed failure state or throw a typed exception, not return `null` silently.
+
+**Testability Anti-Patterns to Forbid in Spec**
+- `new ClassName()` inside a method body for any injectable dependency
+- `static::method()` calls to external services (DB queries, API clients) inside business logic
+- Global state reads (`$_SESSION`, `$_GET`, `$_POST` directly in service/model layer)
+- Logic buried inside a Controller method with no Service extraction
+- Methods longer than ~30 lines with mixed I/O and logic
+
+**Test Surface Declaration**
+After the check, declare in the spec what the Unit Test Writer should be able to test:
+
+```
+### Testability Surface
+- Unit-testable (pure logic, no mock needed):
+  - `ClassName::methodName(input): returnType` — [what it does]
+- Unit-testable with mocks:
+  - `ClassName::methodName()` — mocks: [DependencyA, DependencyB]
+- Integration-only (cannot unit test without live infra):
+  - [list any, with reason]
+- Side effects to assert via mock:
+  - [e.g. NotificationService::send() called once with correct payload]
+```
+
+> ⚠️ A spec that produces untestable code is an incomplete spec. If the Unit Test Writer cannot write a meaningful test for the core logic, the implementation design is wrong — not the tests.
+
+---
+
 ### Step 2 — Read Skill Files Before Planning
 
 Before writing a single line of the spec, read all relevant skill files.
@@ -448,6 +497,16 @@ Brief background. Why does this exist?
 - Responsiveness: [mobile-first / desktop-first (back-office only) / responsive table with horizontal scroll]
 - Accessibility baseline: [descriptive labels / no color-only status indicators / sufficient contrast / inputs associated with labels]
 
+### Testability Surface
+- Unit-testable (pure logic, no mock needed):
+  - `ClassName::methodName(input): returnType` — [what it does]
+- Unit-testable with mocks:
+  - `ClassName::methodName()` — mocks: [DependencyA, DependencyB]
+- Integration-only (cannot unit test without live infra):
+  - [list any, with reason — or "none"]
+- Side effects to assert via mock:
+  - [e.g. NotificationService::send() called once with correct payload — or "none"]
+
 ### Skill Files Read
 - `skills/xxx.md` ✅
 - `skills/yyy.md` ✅
@@ -517,6 +576,11 @@ Explicit list of files/modules the Executor must not modify.
 - [ ] Responsive behavior matches specced target (mobile / desktop-first)
 - [ ] No color-only status indicators — text or icon accompanies color
 - [ ] No inline duplication added — existing duplication extracted or flagged as debt
+- [ ] All injectable dependencies are injected — not instantiated inline
+- [ ] Business logic is separated from I/O (DB, API, file) into distinct methods
+- [ ] All methods have explicit typed return values — no silent null returns on failure
+- [ ] Testability Surface section is complete and non-empty
+- [ ] Unit Test Writer can generate at least 1 pure-logic test without a real DB or API
 ```
 
 ---
@@ -546,6 +610,16 @@ Before handing off, self-check every item below. If any answer is NO → revise 
 - [ ] Are existing (old) callsites left untouched — flagged for the user's decision, not silently refactored?
 - [ ] If marked reusable — is the public interface clean enough that another dev can use it without reading internals?
 - [ ] Is flagged duplication (same-module and cross-module) documented as Technical Debt?
+
+**Testability**
+- [ ] Did I complete the Testability Check (Step 1.11)?
+- [ ] Is the Testability Surface section filled — not empty or "TBD"?
+- [ ] Are all injectable dependencies specced as injected — not instantiated inline?
+- [ ] Is business logic separated from I/O into distinct, independently callable methods?
+- [ ] Do all new methods have explicit typed return values?
+- [ ] Are side effects expressed through injected dependencies — not hardcoded calls?
+- [ ] Can the Unit Test Writer produce at least one pure-logic test without a real DB or API?
+- [ ] Are testability anti-patterns (static calls, global state, God methods) absent from the spec?
 
 **Security**
 - [ ] Did I complete the Security Check (Step 1.7)?
@@ -630,6 +704,17 @@ Before handing off, self-check every item below. If any answer is NO → revise 
 - ALWAYS document flagged duplication (same-module and cross-module) as Technical Debt in the spec
 - ALWAYS spec reusable components/methods with a clean public interface — no leaking internals
 - ALWAYS flag reusable candidates to Skill Extractor after QA pass
+
+### Testability
+- NEVER spec a Service or Model method that instantiates its own external dependencies inline — always inject
+- NEVER allow business logic and I/O (DB, API, file) to live in the same method — always separate
+- NEVER spec a method with a silent null return on failure — always typed return or typed exception
+- NEVER leave the Testability Surface section blank or as "TBD"
+- ALWAYS complete the Testability Check (Step 1.11) before writing the spec
+- ALWAYS spec dependencies as injectable so Unit Test Writer can mock them
+- ALWAYS separate pure logic from side effects so core behavior is testable without a real DB or API
+- ALWAYS include at least one unit-testable pure-logic method per Service class
+- ALWAYS declare side effects as mockable dependencies — not hardcoded calls
 
 ### Security
 - NEVER spec a route or action without explicitly addressing auth/permission
