@@ -12,6 +12,12 @@ One agent, one responsibility. Planner doesn't write code. Executor doesn't impr
 (Decomposer) -> Planner -> (Doubt Review) -> Executor -> (Unit Test Writer) -> QA -> (Specialist Reviews) -> Docs/Skill Extractor
 ```
 
+## Workflow State & Artifacts
+
+For each non-trivial feature, create `.hitl-work/features/<feature-slug>/` and copy `workflow-state.template.md` to `status.md`. Every agent must read the state before acting and update only the fields belonging to its role before handoff. Keep the artifact index, routing decisions, findings ledger, and verification evidence current at every handoff.
+
+Store feature artifacts in that directory: `prd.md`, `doubt-review.md`, `test-plan.md`, `qa-report.md`, `ui-spec.md`, and `reviews/<specialist>.md`. Do not overwrite another feature's root-level artifacts.
+
 **Start where:**
 - Large PRD -> **Decomposer**
 - New feature/bug/refactor -> **Planner**
@@ -42,6 +48,27 @@ One agent, one responsibility. Planner doesn't write code. Executor doesn't impr
 | UI/UX Planner | `ui-ux-planner.md` | When Planner delegates UI |
 | UI Skill Extractor | `ui-skill-extractor.md` | After QA, extract visual tokens |
 
+## Required Routing
+
+| Change condition | Required stages |
+|---|---|
+| New endpoint, auth/authz, webhook, user-controlled input, external API | Security Review |
+| Schema change, index, backfill, or data migration | Doubt Review + Migration Review |
+| New query, bulk operation, caching, queue/job, or high-traffic endpoint | Performance Review |
+| Cross-module change, new architectural pattern, or substantial refactor | Architecture Review |
+| New screen, critical UI flow, reusable UI component, or substantial redesign | UI/UX Planner; UI Skill Extractor after QA |
+| Non-trivial business logic | Unit Test Writer, including approved Test Plan |
+| Bug with unknown root cause | Debug Agent before planning a fix |
+
+A required stage may be skipped only when `status.md` records the reason and the human accepts the risk.
+
+## Re-verification Loop
+
+1. QA or specialist findings receive IDs (`QA-001`, `SEC-001`, `PERF-001`, and so on) in `status.md`.
+2. Executor fixes only approved findings and marks them `Fixed` with the changed files.
+3. QA verifies the regression after every fix. The specialist who reported a Critical finding re-checks it before closure.
+4. A finding is closed only as `Fixed`, `Accepted risk` (human decision recorded), or `Deferred` (owner and follow-up recorded).
+
 ## Instructions
 
 1. **Read the agent file before acting.** Never summarize from memory.
@@ -64,8 +91,8 @@ One agent, one responsibility. Planner doesn't write code. Executor doesn't impr
 4. **Execute** — `executor.md`. One step at a time. Stop on ambiguity.
 5. **Unit Test Writer** *(optional)* — `unit-test-writer.md`. Test Plan -> approval -> Test Code.
 6. **QA** — `qa.md`. Spec Compliance -> Breaking Changes -> DoD -> Code Quality. Verdict: PASS / FAIL / PASS WITH WARNINGS.
-7. **Specialist Reviews** *(as needed, parallel ok)* — findings by severity -> Executor.
-8. **Docs & Skill Extraction** — write from actual implementation, not the plan.
+7. **Specialist Reviews** *(required by the routing table; otherwise as needed, parallel ok)* — findings by severity -> Executor -> re-verification.
+8. **Docs & Skill Extraction** — write from actual implementation, not the plan, after all blocking findings are closed.
 
 ## Rules
 

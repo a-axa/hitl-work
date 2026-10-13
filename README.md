@@ -34,14 +34,32 @@ npx skills list -g       # global
 (Decomposer) → Planner → (Doubt Review) → Executor → (Unit Test Writer) → QA → (Review specialists) → Documentation
 ```
 
+### Feature Artifact Convention
+
+For every non-trivial feature, create `.hitl-work/features/<feature-slug>/` and copy `workflow-state.template.md` to `status.md`. Keep all artifacts for that feature together:
+
+```text
+.hitl-work/features/<feature-slug>/
+  status.md
+  prd.md
+  doubt-review.md
+  test-plan.md
+  qa-report.md
+  reviews/
+    security.md
+    performance.md
+```
+
+`status.md` is the source of truth for required routing, handoffs, findings, and verification evidence. It prevents a later session from treating an incomplete review as finished.
+
 0. **Decomposer** *(optional, for large-scope inputs)* — if the input is a large PRD spanning many modules, break it into discrete tasks (`task-1.md`, `task-2.md`, ...) before passing to the Planner.
 1. **Planner** produces a detailed, unambiguous spec (`prd.md`) — per task (if routed through Decomposer) or directly from a feature request.
-2. **Doubt Review** *(optional but recommended)* — stress-tests the spec before execution. Surfaces hidden assumptions, missed edge cases, and scope creep.
+2. **Doubt Review** — required for schema/data changes; otherwise optional but recommended. It stress-tests the spec before execution and surfaces hidden assumptions, missed edge cases, and scope creep.
 3. **Executor** implements exactly per spec — no improvisation.
-4. **Unit Test Writer** *(optional but recommended for non-trivial logic)* — takes the markdown spec as input, produces a Test Plan (human-approved) then generates test code. Feeds QA with a ready verification baseline.
-5. **QA** verifies that the implementation matches the spec — skeptical by default. If Unit Test Writer ran, uses generated tests as part of verification.
-6. Review specialists (**Architecture, Security, Performance, Migration, UI/UX**) run in parallel or after QA, depending on what the feature touches.
-7. **Documentation** & **Skill Extractor** close the cycle — documenting what was built and capturing patterns for future features.
+4. **Unit Test Writer** — required for non-trivial business logic. It produces a human-approved Test Plan, then test code that feeds QA.
+5. **QA** verifies implementation against the spec and records test/build/manual-verification evidence.
+6. Required review specialists run based on the routing table below. They report findings only; the Executor fixes approved findings, then QA re-verifies.
+7. **Documentation** & **Skill Extractor** close the cycle only after all blocking findings are closed or explicitly accepted by the human.
 
 ---
 
@@ -117,5 +135,23 @@ Run after the Executor finishes, typically in parallel with or after QA. All age
 6. **QA** verifies — using Unit Test Writer output as baseline if available.
 7. Run relevant review specialists (e.g., DB migration involved → Migration Review; new endpoint → Security + API Agent AUDIT).
 8. Once everything passes → **Documentation** & **Skill Extractor** (or **UI Skill Extractor** for UI features) to close the cycle.
+
+### Required Routing
+
+| Change condition | Required stages |
+|---|---|
+| New endpoint, auth/authz, webhook, user-controlled input, external API | Security Review |
+| Schema change, index, backfill, data migration | Doubt Review + Migration Review |
+| New query, bulk operation, cache, queue/job, high-traffic endpoint | Performance Review |
+| Cross-module change, new architectural pattern, substantial refactor | Architecture Review |
+| New screen, critical UI flow, reusable UI component, substantial redesign | UI/UX Planner; UI Skill Extractor after QA |
+| Non-trivial business logic | Unit Test Writer, including approved Test Plan |
+| Bug with an unknown root cause | Debug Agent before planning a fix |
+
+A required stage may be skipped only when the human accepts the risk and the reason is recorded in `status.md`.
+
+### Re-verification
+
+Every finding receives an ID in `status.md` (`QA-001`, `SEC-001`, `PERF-001`, and so on). After the Executor fixes an approved finding, QA must run regression verification. A Critical finding also requires re-check by the specialist who reported it. Findings close only as `Fixed`, `Accepted risk`, or `Deferred`, with the decision recorded.
 
 Each agent refuses to do work outside its scope (e.g., the Planner refuses to write code, QA refuses to approve without reading the actual code, Unit Test Writer never generates test code without an approved Test Plan) — this is intentional, so each stage remains an independent check on the previous one.

@@ -7,6 +7,15 @@ description: Generate unit tests from a markdown spec or documentation file (SKI
 
 An agent skill for the HITL-Work pipeline. Takes a markdown spec (SKILL.md, feature doc, API contract, etc.) and produces a structured **Test Plan** first, then generates the **test code** — language-agnostic by design, adapting to whatever stack is declared in the spec or inferred from context.
 
+## Workflow State
+
+For a feature workflow, read `.hitl-work/features/<feature-slug>/status.md` before analyzing the spec. Update it at each checkpoint:
+
+- Add the Test Plan path and mark it `Pending approval` before presenting it.
+- Mark the plan `Approved` only after explicit human approval.
+- Add generated test-file paths and mark Test code `Complete` after test code is written.
+- Set Current Handoff to QA, including the command QA should run and any known coverage gap.
+
 ---
 
 ## Input

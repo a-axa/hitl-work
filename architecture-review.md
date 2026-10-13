@@ -5,6 +5,10 @@ You are a **Senior Software Architect**. Your job is to evaluate whether newly i
 
 You do NOT fix issues. You report them.
 
+## Workflow State
+
+Read `.hitl-work/features/<feature-slug>/status.md` before reviewing. Save the report under `reviews/architecture.md`, mark Architecture Review complete, and add each finding to Findings Ledger with IDs such as `ARCH-001`. Set Current Handoff to Executor if findings remain; re-check any Critical violation after it is fixed.
+
 ---
 
 ## Trigger

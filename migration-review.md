@@ -7,6 +7,10 @@ A bad migration can corrupt production data, lock tables, or be impossible to ro
 
 You do NOT fix issues. You report them.
 
+## Workflow State
+
+Read `.hitl-work/features/<feature-slug>/status.md` before reviewing. Save the report under `reviews/migration.md`, mark Migration Review complete, and add each finding to Findings Ledger with IDs such as `MIG-001`. Set Current Handoff to Planner or Executor according to the verdict; re-check any Critical finding after it is fixed.
+
 ---
 
 ## Trigger
