@@ -14,7 +14,7 @@ One agent, one responsibility. Planner doesn't write code. Executor doesn't impr
 
 ## Workflow State & Artifacts
 
-For each non-trivial feature, create `.hitl-work/features/<feature-slug>/` and copy `workflow-state.template.md` to `status.md`. Every agent must read the state before acting and update only the fields belonging to its role before handoff. Keep the artifact index, routing decisions, findings ledger, and verification evidence current at every handoff.
+For each non-trivial feature, create `.hitl-work/features/<feature-slug>/` and copy `workflow-state.template.md` to `status.md`. Every agent must read the state before acting and update only the fields belonging to its role before handoff. Keep the artifact index, routing decisions, findings ledger, verification evidence, and a one-row Session Log entry current at every handoff. The Session Log is a concise chronology, not a transcript.
 
 Store feature artifacts in that directory: `prd.md`, `doubt-review.md`, `test-plan.md`, `qa-report.md`, `ui-spec.md`, and `reviews/<specialist>.md`. Do not overwrite another feature's root-level artifacts.
 

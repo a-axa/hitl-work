@@ -2,6 +2,7 @@
 workspace/
 evals/
 tmp/
+tools/
 *.log
 
 # os / editor

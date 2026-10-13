@@ -44,6 +44,14 @@ Copy this file to `.hitl-work/features/<feature-slug>/status.md`. Keep it update
 - **Manual verification:** scenario and observed result
 - **Not verified:** reason and remaining risk
 
+## Session Log
+
+Append one concise row at the end of every agent session or handoff. Describe the decision, completed work, blocker, or verification result, not a transcript.
+
+| Date | Agent(s) | What happened |
+|---|---|---|
+| YYYY-MM-DD | Planner | `prd.md` drafted; waiting for Doubt Review. |
+
 ## Current Handoff
 - **Current stage:**
 - **Next responsible agent:**
