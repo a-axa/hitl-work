@@ -34,6 +34,20 @@ npx skills list -g       # global
 (Decomposer) → Planner → (Doubt Review) → Executor → (Unit Test Writer) → QA → (Review specialists) → Documentation
 ```
 
+### Workflow Modes
+
+Choose the lowest safe mode and record it in `status.md`. A mode must escalate immediately when a risk trigger appears.
+
+| Mode | Best for | Required flow |
+|---|---|---|
+| 🔴 **Full Pipeline** | New feature, multi-module work, migrations, security-sensitive changes, external integrations, unclear or high-blast-radius work | Full Planner, routing-required reviews, Executor, applicable tests, QA |
+| 🟡 **Standard** | Understood bug fix or enhancement, normally 1–2 files, no high-risk surface | Planner Lite, Executor, QA; add reviews only when routing requires them |
+| 🟢 **Quick** | Typo, documentation-only correction, known-safe config adjustment, or isolated one-file hotfix | Executor with a Quick Change Record, then minimal QA |
+
+Quick mode is **not** permitted for migrations, secrets, auth/authz, security-sensitive input, external APIs, dependencies, public contracts, DB queries, unclear root causes, or a change needing more than one file. If any condition appears, escalate to Standard or Full.
+
+Planner Lite is a five-section spec: **Scope, Files to Modify, Steps, Breaking Changes, Definition of Done**. It is not a shortcut around a required review.
+
 ### Feature Artifact Convention
 
 For every non-trivial feature, create `.hitl-work/features/<feature-slug>/` and copy `workflow-state.template.md` to `status.md`. Keep all artifacts for that feature together:

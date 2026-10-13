@@ -48,6 +48,18 @@ Store feature artifacts in that directory: `prd.md`, `doubt-review.md`, `test-pl
 | UI/UX Planner | `ui-ux-planner.md` | When Planner delegates UI |
 | UI Skill Extractor | `ui-skill-extractor.md` | After QA, extract visual tokens |
 
+## Workflow Modes
+
+Select a mode before acting and record it in `status.md`. If the user explicitly requests a mode, use it only when it satisfies the eligibility rules. Otherwise choose the lowest safe mode. Any risk signal escalates the work immediately; never use Quick mode to bypass a required review.
+
+| Mode | Use for | Required path | Not allowed when |
+|---|---|---|---|
+| 🔴 **Full Pipeline** | New feature, multi-module work, migration, security-sensitive change, external integration, unclear/high blast radius | Decomposer when scope needs splitting → full Planner → required reviews → Executor → tests when applicable → QA → docs/skill extraction as applicable | Never downgrade merely to save time |
+| 🟡 **Standard** | Scoped bug fix or enhancement, understood root cause, normally 1–2 files and no high-risk surface | Planner Lite → Executor → QA; add only reviews triggered by routing | Migration, auth/authz, external API, user-controlled input, cross-module change, unclear root cause, or more than 2 expected files |
+| 🟢 **Quick** | Typo, comment, documentation-only correction, known-safe config value, or isolated hotfix with an obvious one-file fix | Executor with Quick Change Record → minimal QA | Migration, secrets, auth/authz, security surface, external API, user input, dependency, public API/contract, database query, unclear root cause, or more than 1 expected file |
+
+**Quick Change Record** must state: target file, exact intended change, expected behavior, rollback method, and why the change is eligible for Quick mode. Executor stops and escalates to Standard or Full if the actual code contradicts that record.
+
 ## Required Routing
 
 | Change condition | Required stages |
@@ -73,7 +85,7 @@ A required stage may be skipped only when `status.md` records the reason and the
 
 1. **Read the agent file before acting.** Never summarize from memory.
 2. **Follow each agent's process exactly.** Boundaries are intentional.
-3. **Respect pipeline order.** Don't skip Planner to write code. Don't skip QA to ship.
+3. **Respect the selected mode.** Full Pipeline requires Planner and QA; Standard requires Planner Lite and QA; Quick may skip Planner only with a recorded Quick Change Record and minimal QA. Don't skip QA to ship.
 4. **HITL checkpoints:**
    - After Decomposer -> stop, human reviews task list.
    - After Planner -> optionally run Doubt Review.
@@ -85,14 +97,15 @@ A required stage may be skipped only when `status.md` records the reason and the
 
 ## Workflow
 
-1. **Decompose** *(optional)* — `decomposer.md`. Output `task-N.md`. Stop for review.
-2. **Plan** — `planner.md`. Output `prd.md`: Necessity Check, Duplication Scan, Security/Perf/UI-UX, Scope, Files, Steps, Breaking Changes, What NOT to Touch, DoD.
-3. **Doubt Review** *(optional)* — `doubt-review.md`. Verdict: READY / BLOCKED / NEEDS CLARIFICATION.
-4. **Execute** — `executor.md`. One step at a time. Stop on ambiguity.
-5. **Unit Test Writer** *(optional)* — `unit-test-writer.md`. Test Plan -> approval -> Test Code.
-6. **QA** — `qa.md`. Spec Compliance -> Breaking Changes -> DoD -> Code Quality. Verdict: PASS / FAIL / PASS WITH WARNINGS.
-7. **Specialist Reviews** *(required by the routing table; otherwise as needed, parallel ok)* — findings by severity -> Executor -> re-verification.
-8. **Docs & Skill Extraction** — write from actual implementation, not the plan, after all blocking findings are closed.
+1. **Select mode** — Full, Standard, or Quick, and record the reason in `status.md`.
+2. **Decompose** *(Full only, optional)* — `decomposer.md`. Output `task-N.md`. Stop for review.
+3. **Plan** — Full: `planner.md` full spec. Standard: Planner Lite spec. Quick: Quick Change Record only.
+4. **Doubt Review** *(required by routing; otherwise Full only when risk warrants it)* — `doubt-review.md`. Verdict: READY / BLOCKED / NEEDS CLARIFICATION.
+5. **Execute** — `executor.md`. One step at a time. Stop and escalate if scope exceeds the selected mode.
+6. **Unit Test Writer** *(required by routing; otherwise optional)* — `unit-test-writer.md`. Test Plan -> approval -> Test Code.
+7. **QA** — Full/Standard: full QA. Quick: minimal QA. All modes require a clear PASS / FAIL / PASS WITH WARNINGS verdict and recorded evidence.
+8. **Specialist Reviews** *(required by the routing table; otherwise as needed, parallel ok)* — findings by severity -> Executor -> re-verification.
+9. **Docs & Skill Extraction** — Full when applicable; Standard/Quick only when the change establishes a reusable or user-facing behavior, after all blocking findings are closed.
 
 ## Rules
 

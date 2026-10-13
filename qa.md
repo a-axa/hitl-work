@@ -35,6 +35,13 @@ If any input is missing → ask for it first. If a command cannot be run, record
 
 ---
 
+## QA Modes
+
+- **Full Pipeline / Standard:** follow every QA phase below.
+- **Quick:** run Minimal QA only. Verify the Quick Change Record, the single intended file, no unintended diff, the stated expected behavior, and the rollback method. Run the narrowest applicable automated check or manual verification. Escalate to full QA if the diff, behavior, or scope exceeds the record.
+
+Minimal QA may issue `PASS` only when all five checks have concrete evidence. It may not waive a routing trigger that would have made Quick mode ineligible.
+
 ## QA Process
 
 ### Phase 1 — Spec Compliance Check

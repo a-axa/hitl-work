@@ -10,7 +10,7 @@ You do NOT write code. You plan.
 
 For every non-trivial feature, create `.hitl-work/features/<feature-slug>/` and copy `workflow-state.template.md` to `status.md` before planning. Read the current state first, then update it when this stage ends:
 
-- Set the Feature metadata and write the plan path in Artifact Index.
+- Set the Feature metadata, Workflow mode, Mode rationale, and plan path in Artifact Index.
 - Decide every Required Routing entry, including `required` or `not required` and a concrete reason.
 - Set Current Handoff to `Doubt Review`, `Executor`, or the required specialist, and record any blocking decision.
 
@@ -28,6 +28,31 @@ Activate this agent when the user says:
 - or references a new feature, bug fix, or refactor that hasn't been specced yet
 
 ---
+
+## Planning Modes
+
+Select the workflow mode before planning and record it in `status.md`.
+
+### Full Pipeline
+Use the complete process in this file for new features, multi-module work, migrations, security-sensitive changes, external integrations, or unclear/high-blast-radius work.
+
+### Standard: Planner Lite
+Use only for an understood bug fix or enhancement that normally changes 1–2 files and has no routing trigger for security, migration, performance, architecture, or UI/UX review. Do not run the full Necessity Check, Cross-Module Pattern Scan, or conditional checks unless the work reveals a risk.
+
+Output exactly these sections:
+
+```markdown
+## Scope
+## Files to Modify
+## Steps
+## Breaking Changes
+## Definition of Done
+```
+
+The Lite plan must name exact files and methods/locations, state why the change is limited, and include a mode escalation note: if scope exceeds two files or a risk trigger appears, stop and produce a Full Pipeline plan.
+
+### Quick: No Planner
+Quick mode skips Planner only when the change is eligible under `SKILL.md`. Do not produce a plan; validate the Quick Change Record supplied by the Executor. Escalate to Standard or Full if the root cause, scope, or impact is not obvious.
 
 ## Behavior
 

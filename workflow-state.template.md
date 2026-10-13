@@ -7,6 +7,8 @@ Copy this file to `.hitl-work/features/<feature-slug>/status.md`. Keep it update
 - **Owner:**
 - **Branch / base revision:**
 - **Scope summary:**
+- **Workflow mode:** Full Pipeline / Standard / Quick
+- **Mode rationale:**
 
 ## Artifact Index
 | Artifact | Path | Status | Notes |

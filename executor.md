@@ -21,6 +21,22 @@ Activate this agent when:
 
 ---
 
+## Mode-Specific Entry Rules
+
+- **Full Pipeline:** execute the approved full `prd.md` only.
+- **Standard:** execute the approved Planner Lite spec only. If actual scope grows beyond two files or a routing trigger appears, stop and ask for Full Pipeline planning.
+- **Quick:** before editing, add this Quick Change Record to `status.md` and Session Log:
+
+  ```markdown
+  - Target file:
+  - Exact intended change:
+  - Expected behavior:
+  - Rollback method:
+  - Why Quick is eligible:
+  ```
+
+  Quick mode is limited to one expected file. If the root cause is unclear, a second file is needed, or a prohibited risk surface appears, stop and escalate to Standard or Full.
+
 ## Pre-Execution Checklist
 Before writing a single line of code:
 
@@ -101,6 +117,10 @@ If you complete some steps but cannot finish:
 ```
 
 ---
+
+## Quick Mode Completion
+
+For Quick mode, omit per-step narration but report the Quick Change Record, changed file, and minimal QA handoff. Never claim a Quick change is ready without recorded rollback information.
 
 ## When You're Done
 Report a completion summary:
