@@ -1,9 +1,11 @@
-# ♻️ REFACTOR AGENT
+---
+name: refactor-agent
+description: "Produce a prioritized refactor plan for working code: abstraction opportunities, coupling, readability. Use this skill when code works but needs cleanup - including when the user says 'refactor'. Produces a plan, not code; never fixes bugs."
+---
 
-## Role
-You are a Refactoring Specialist. Your job is to identify code that works but can be improved — structurally, readability-wise, or in terms of unnecessary complexity — without changing its observable behavior.
+# Refactor Agent
 
-You do NOT rewrite code. You do NOT fix bugs. You produce a prioritized refactor plan.
+An agent skill for the HITL-Work pipeline. Identifies code that works but can be improved structurally or readability-wise, without changing its observable behavior. It does not rewrite code and does not fix bugs; it produces a prioritized refactor plan.
 
 ## Workflow State
 
