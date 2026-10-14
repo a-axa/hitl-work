@@ -63,12 +63,7 @@ HITL·Work pairs well with [anti-slop](https://github.com/miqdadbadjuber/anti-sl
 
 ## Workflow Modes
 
-The user explicitly chooses the mode. Before any agent runs: STOP, present all three modes below with their ponytail intensity and your recommendation (the lowest safe mode per the eligibility rules), and wait for the user's choice. Do not proceed until the user has chosen. If the chosen mode violates the eligibility rules, refuse with a concrete explanation and ask again. Record the chosen mode and ponytail intensity in `status.md`. In non-interactive runs where the user cannot be reached, use the lowest safe mode and record that the choice was automatic. Any risk signal escalates the work immediately; never use Quick mode to bypass a required review.
-
-**Ponytail intensity per mode:**
-- 🔴 Full Pipeline → ponytail FULL
-- 🟡 Standard → ponytail LITE
-- 🟢 Quick → ponytail OFF
+The user explicitly chooses the mode. Before any agent runs: STOP, present all three modes below with your recommendation (the lowest safe mode per the eligibility rules), and wait for the user's choice. Do not proceed until the user has chosen. If the chosen mode violates the eligibility rules, refuse with a concrete explanation and ask again. Record the chosen mode in `status.md`. In non-interactive runs where the user cannot be reached, use the lowest safe mode and record that the choice was automatic. Any risk signal escalates the work immediately; never use Quick mode to bypass a required review.
 
 | Mode | Use for | Required path | Not allowed when |
 |---|---|---|---|
@@ -78,19 +73,19 @@ The user explicitly chooses the mode. Before any agent runs: STOP, present all t
 
 **Quick Change Record** must state: target file, exact intended change, expected behavior, rollback method, and why the change is eligible for Quick mode. Executor stops and escalates to Standard or Full if the actual code contradicts that record.
 
-## Ponytail Combination
+## Lean Code Discipline
 
-Ponytail (https://github.com/DietrichGebert/ponytail, MIT) is the "lazy senior dev" skill: solve the whole problem with the least new code. It combines with HITL·Work per agent, at the intensity set by the chosen workflow mode. Intensities: FULL = the complete ponytail ruleset; LITE = build what was asked and name the smaller option, minimal ceremony; OFF = skip ponytail entirely.
+HITL·Work wraps code in a lot of process. These values keep the code itself lean. They were adapted from an audit of ponytail (https://github.com/DietrichGebert/ponytail, MIT). No external skill is required: the values below are native HITL·Work rules.
 
-**Planner** (FULL only): run the ponytail ladder for every planned piece of new code before writing the spec. Rungs: 1. does it need to exist, 2. already in this codebase, 3. standard library or platform feature, 4. installed dependency (never add one for a few lines), 5. one line a reader gets at a glance, 6. otherwise the minimum that works. Record the justifying rung (or the existing code reused) per spec item. This replaces the checkbox-style YAGNI check with per-item justification.
+**Planner:** before writing the spec, run the minimality ladder for every planned piece of new code. Rungs: 1. does it need to exist, 2. already in this codebase, 3. standard library or platform feature, 4. installed dependency (never add one for a few lines), 5. one line a reader gets at a glance, 6. otherwise the minimum that works. Record the justifying rung (or the existing code reused) per spec item. This replaces the checkbox-style YAGNI check with per-item justification. Full Pipeline uses the full ladder; Standard keeps the YAGNI check without per-item records; Quick is trivially minimal by definition.
 
-**Executor** (FULL and LITE): implement the minimum per spec, reuse-first. No abstraction, wrapper, type conversion, option, config, boilerplate, or "for later" code nobody asked for. Deletion beats addition. Bug fixes: grep every caller first, then fix the root cause once in the shared code. A deliberate shortcut gets a `shortcut: <the limit>, <when to upgrade>` comment.
+**Executor:** implement the minimum per spec, reuse-first. No abstraction, wrapper, type conversion, option, config, boilerplate, or "for later" code nobody asked for. Deletion beats addition. Bug fixes: grep every caller first, then fix the root cause once in the shared code. A deliberate shortcut gets a `shortcut: <the limit>, <when to upgrade>` comment.
 
-**QA** (FULL and LITE): add a cut-list to Phase 5 findings. Flag over-engineering (unasked abstractions, wrappers, boilerplate, speculative flexibility) as Warning findings. Never flag the never-cut list: validation at trust boundaries, error handling that prevents data loss, security, accessibility, anything the user explicitly asked for. Harvest `shortcut:` comments into TECH-DEBT.md entries.
+**QA:** add a cut-list to Phase 5 findings. Flag over-engineering (unasked abstractions, wrappers, boilerplate, speculative flexibility) as Warning findings. Never flag the never-cut list: validation at trust boundaries, error handling that prevents data loss, security, accessibility, anything the user explicitly asked for. Harvest `shortcut:` comments into TECH-DEBT.md entries.
 
-**Unit Test Writer** (all intensities): already aligned. New non-trivial logic (a branch, a loop, a parser, money or security handling) leaves one small test; trivial changes need none.
+**Unit Test Writer:** already aligned. New non-trivial logic (a branch, a loop, a parser, money or security handling) leaves one small test; trivial changes need none.
 
-**Explicit non-goal:** ponytail minimalism applies to shipped code only, never to HITL·Work process artifacts (`prd.md`, `status.md`, `qa-report.md`, `TECH-DEBT.md`, reviews). The paper trail stays complete; the code stays lean.
+**Explicit non-goal:** leanness applies to shipped code only, never to HITL·Work process artifacts (`prd.md`, `status.md`, `qa-report.md`, `TECH-DEBT.md`, reviews). The paper trail stays complete; the code stays lean.
 
 ## Required Routing
 
@@ -147,7 +142,7 @@ If your context was compacted, the session restarted, or you are picking up exis
 
 ## Workflow
 
-1. **Select mode** — STOP and ask the user to choose explicitly (Full / Standard / Quick), presenting each mode's ponytail intensity and your recommendation. Validate the choice against the eligibility rules; refuse unsafe picks with an explanation. Record the mode, ponytail intensity, and reason in `status.md`.
+1. **Select mode** — STOP and ask the user to choose explicitly (Full / Standard / Quick), presenting your recommendation. Validate the choice against the eligibility rules; refuse unsafe picks with an explanation. Record the mode and reason in `status.md`.
 2. **Decompose** *(Full only, optional)* — `decomposer.md`. Output `task-N.md`. Stop for review.
 3. **Plan** — Full: `planner.md` full spec. Standard: Planner Lite spec. Quick: Quick Change Record only.
 4. **Doubt Review** *(required by routing; otherwise Full only when risk warrants it)* — `doubt-review.md`. Verdict: READY / BLOCKED / NEEDS CLARIFICATION.
