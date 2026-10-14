@@ -14,7 +14,7 @@ Copy this file to `.hitl-work/features/<feature-slug>/status.md`. Keep it update
 | Artifact | Path | Status | Notes |
 |---|---|---|---|
 | Decomposition | `tasks/` | Not required / Pending / Complete | |
-| Plan | `prd.md` | Not started / Complete | |
+| Plan | `plan.md` | Not started / Complete | |
 | Doubt review | `doubt-review.md` | Not required / Pending / Complete | |
 | UI spec | `ui-spec.md` | Not required / Pending / Complete | |
 | Test plan | `test-plan.md` | Not required / Pending approval / Approved | |
@@ -52,7 +52,7 @@ Append one concise row at the end of every agent session or handoff. Describe th
 
 | Date | Agent(s) | What happened |
 |---|---|---|
-| YYYY-MM-DD | Planner | `prd.md` drafted; waiting for Doubt Review. |
+| YYYY-MM-DD | Planner | `plan.md` drafted; waiting for Doubt Review. |
 
 ## Current Handoff
 - **Current stage:**

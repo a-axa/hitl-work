@@ -57,7 +57,7 @@ This spec is that removal.
 ### Step 1 — Clarify Before Speccing
 Before writing anything, ask these if not already answered:
 
-- What is the exact feature this UI serves? (Get the prd.md from main Planner if available)
+- What is the exact feature this UI serves? (Get the plan.md from main Planner if available)
 - Who are the users of this screen? (Admin? Sales staff? Field agent? Tenant?)
 - What device/viewport do they primarily use? (Desktop browser? Mobile? Both?)
 - Does this codebase have a UI skill file? (e.g. `ams-ui.md`, `orca-ui.md`) → Read it first.
@@ -120,7 +120,7 @@ Output a `ui-spec.md` file with the following structure:
 ## UI Spec: [Feature Name]
 
 ### Reference
-- Main spec (prd.md): [link or filename]
+- Main spec (plan.md): [link or filename]
 - Closest existing screen: [file path + route]
 - Device target: [Desktop-first / Mobile-first / Both]
 - CSS framework: [Tailwind vX / Bootstrap vX / Custom — file path]

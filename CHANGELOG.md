@@ -8,6 +8,7 @@ All notable changes to HITL·Work are documented here.
 - Lean Code Discipline: ponytail-audited minimalism as native HITL·Work rules (minimality ladder in Planner, reuse-first minimal implementation in Executor, cut-list in QA Phase 5, `shortcut:` comments harvested into TECH-DEBT.md); applies to shipped code only, never to process artifacts
 - Explicit user mode choice: the agent stops and asks the user to pick Full / Standard / Quick before any agent runs, validating the choice against eligibility rules
 - Standardized agent file headers: YAML frontmatter (`name`, `description` with trigger guidance) and uniform Title Case headings across all 17 agent files, matching unit-test-writer.md
+- Renamed the Planner's output artifact from `prd.md` to `plan.md` across all skill files, README, and the workflow-state template (uppercase `PRD` still refers to the Decomposer's input requirements document)
 
 ## [1.0.0] - 2026-10-14
 
