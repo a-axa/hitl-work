@@ -94,6 +94,24 @@ A required stage may be skipped only when `status.md` records the reason and the
 3. QA verifies the regression after every fix. The specialist who reported a Critical finding re-checks it before closure.
 4. A finding is closed only as `Fixed`, `Accepted risk` (human decision recorded), or `Deferred` (owner and follow-up recorded).
 
+### Conflicting findings
+
+When two specialist reviews contradict each other (for example Security requires X while Performance requires Y):
+
+1. Do not let the Executor pick a side on its own.
+2. Record both findings in `status.md` with status `Open` and note the conflict explicitly.
+3. STOP and present the trade-off to the human. The human arbitrates.
+4. Record the decision and its rationale in `status.md`. Only then may the Executor proceed.
+
+## Session Recovery
+
+If your context was compacted, the session restarted, or you are picking up existing work:
+
+1. Find the feature state: look for `.hitl-work/features/<feature-slug>/status.md`. If several features exist, continue the most recently updated one, or ask the user which one.
+2. Read `status.md` in full. Trust it over your memory of this conversation.
+3. Continue from the **Current Handoff** field. Do not re-run stages already marked complete in the Artifact Index.
+4. If no `status.md` exists for the requested work, start the pipeline normally.
+
 ## Instructions
 
 1. **Read the agent file before acting.** Never summarize from memory.
