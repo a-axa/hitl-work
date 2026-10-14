@@ -39,7 +39,7 @@ Six months later, you open that folder and reconstruct the full decision history
 (Decomposer) → Planner → (Doubt Review) → Executor → (Unit Test Writer) → QA → (Specialist Reviews) → Documentation
 ```
 
-Three modes — pick the lowest safe one:
+Three modes, picked explicitly by you before any agent runs (the agent recommends the lowest safe one and validates your choice):
 
 | Mode | Use for |
 |---|---|

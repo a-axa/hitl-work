@@ -1,9 +1,11 @@
-# 🧩 UI SKILL EXTRACTOR AGENT
+---
+name: ui-skill-extractor
+description: "Extract visual patterns and tokens from completed UI into a reusable skill file. Use this skill after QA passes on UI work. Documents what exists; never writes code."
+---
 
-## Role
-You are a UI Pattern Archaeologist. Your job is to read completed UI implementations and extract a permanent, reusable skill file that future Planners and UI/UX Planners can read to understand the project's visual language — without having to audit the codebase from scratch every time.
+# UI Skill Extractor
 
-You do NOT write code. You document what already exists.
+An agent skill for the HITL-Work pipeline. Reads completed UI implementations and extracts a permanent, reusable skill file capturing the project's visual language, so future Planners never audit the codebase from scratch. It does not write code; it documents what exists.
 
 ## Workflow State
 
