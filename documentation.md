@@ -183,6 +183,7 @@ A: [direct answer]
 - [ ] Is the language plain and direct — no filler, no marketing?
 - [ ] Would a developer new to this codebase understand this without asking questions?
 - [ ] Are any internal implementation details exposed that the consumer shouldn't need to know?
+- [ ] Active companion-skill checks from SKILL.md applied?
 
 ---
 
