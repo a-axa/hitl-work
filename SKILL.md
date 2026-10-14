@@ -1,6 +1,6 @@
 ---
 name: hitl-work
-description: "Human-in-the-loop multi-agent coding workflow with 17 agents. Use when: decompose PRD, plan feature/spec, execute prd.md, QA, doubt/security/architecture/performance/migration/API/debug/refactor/unit-test review. Indonesian triggers: buatin prd, plan fitur, kerjain sesuai prd, QA dulu, cek security, audit, debug, refactor, bikin unit test. Skip for: one-liners, commit messages, simple snippets, file reads, SQL one-offs, translations."
+description: "Human-in-the-loop multi-agent coding workflow with 17 agents. Use when: decompose PRD, plan feature/spec, execute plan.md, QA, doubt/security/architecture/performance/migration/API/debug/refactor/unit-test review. Indonesian triggers: buatin prd, plan fitur, kerjain sesuai plan, QA dulu, cek security, audit, debug, refactor, bikin unit test. Skip for: one-liners, commit messages, simple snippets, file reads, SQL one-offs, translations."
 ---
 
 # HITL·Work
@@ -16,12 +16,12 @@ One agent, one responsibility. Planner doesn't write code. Executor doesn't impr
 
 For each non-trivial feature, create `.hitl-work/features/<feature-slug>/` and copy `workflow-state.template.md` to `status.md`. Every agent must read the state before acting and update only the fields belonging to its role before handoff. Keep the artifact index, routing decisions, findings ledger, verification evidence, and a one-row Session Log entry current at every handoff. The Session Log is a concise chronology, not a transcript.
 
-Store feature artifacts in that directory: `prd.md`, `doubt-review.md`, `test-plan.md`, `qa-report.md`, `ui-spec.md`, and `reviews/<specialist>.md`. Do not overwrite another feature's root-level artifacts.
+Store feature artifacts in that directory: `plan.md`, `doubt-review.md`, `test-plan.md`, `qa-report.md`, `ui-spec.md`, and `reviews/<specialist>.md`. Do not overwrite another feature's root-level artifacts.
 
 **Start where:**
 - Large PRD -> **Decomposer**
 - New feature/bug/refactor -> **Planner**
-- `prd.md` ready -> **Executor**
+- `plan.md` ready -> **Executor**
 - Code written -> **QA** or specialist review
 - Code needs triage -> **Debug**
 - Markdown spec to test -> **Unit Test Writer**
@@ -46,7 +46,7 @@ HITL·Work pairs well with [anti-slop](https://github.com/miqdadbadjuber/anti-sl
 | Decomposer | `decomposer.md` | PRD too large for one spec |
 | Planner | `planner.md` | No spec yet |
 | Doubt Review | `doubt-review.md` | After Planner, before Executor — risky/multi-tenant/DB changes |
-| Executor | `executor.md` | `prd.md` exists |
+| Executor | `executor.md` | `plan.md` exists |
 | Unit Test Writer | `unit-test-writer.md` | After Executor — test plan + code from markdown spec |
 | QA | `qa.md` | After Executor reports done |
 | Architecture Review | `architecture-review.md` | Layer boundaries, duplication |
@@ -85,7 +85,7 @@ HITL·Work wraps code in a lot of process. These values keep the code itself lea
 
 **Unit Test Writer:** already aligned. New non-trivial logic (a branch, a loop, a parser, money or security handling) leaves one small test; trivial changes need none.
 
-**Explicit non-goal:** leanness applies to shipped code only, never to HITL·Work process artifacts (`prd.md`, `status.md`, `qa-report.md`, `TECH-DEBT.md`, reviews). The paper trail stays complete; the code stays lean.
+**Explicit non-goal:** leanness applies to shipped code only, never to HITL·Work process artifacts (`plan.md`, `status.md`, `qa-report.md`, `TECH-DEBT.md`, reviews). The paper trail stays complete; the code stays lean.
 
 ## Required Routing
 

@@ -14,10 +14,10 @@ Read `.hitl-work/features/<feature-slug>/status.md` with the plan. Save the revi
 ---
 
 ## Trigger
-Activate this agent manually after `planner` outputs a `prd.md`, before handing off to `executor`. Typical invocation:
+Activate this agent manually after `planner` outputs a `plan.md`, before handing off to `executor`. Typical invocation:
 
 ```
-"doubt-review this spec: [paste prd.md content]"
+"doubt-review this spec: [paste plan.md content]"
 "jalanin doubt-review buat plan ini sebelum gue eksekusi"
 ```
 

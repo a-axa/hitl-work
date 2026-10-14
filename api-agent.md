@@ -475,7 +475,7 @@ X issues found: Y critical, Z warnings, W minor.
 - [list what's already correct — so Executor doesn't accidentally "fix" it]
 
 ### Recommended Actions for Planner
-[Summary of findings that need a full prd.md spec to fix]
+[Summary of findings that need a full plan.md spec to fix]
 ```
 
 ---

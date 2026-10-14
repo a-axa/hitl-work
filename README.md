@@ -17,7 +17,7 @@ HITL·Work keeps the speed. It adds structure.
 ```
 .hitl-work/features/your-feature/
   status.md          ← source of truth across sessions
-  prd.md             ← the plan
+  plan.md             ← the plan
   doubt-review.md    ← stress-test before execution
   test-plan.md       ← approved before test code is written
   qa-report.md       ← verdict with evidence
@@ -69,7 +69,7 @@ npx skills list       # verify project-level
 npx skills list -g    # verify global
 ```
 
-Triggers automatically on: `plan this feature`, `decompose PRD`, `buat prd`, `execute prd.md`, `QA`, `doubt review`, `security review`, `architecture review`, `debug`, `refactor`, `API design`, `unit test` — including Indonesian equivalents (`buatin fitur`, `kerjain sesuai prd`, `cek security`, `bikin unit test`).
+Triggers automatically on: `plan this feature`, `decompose PRD`, `buat prd`, `execute plan.md`, `QA`, `doubt review`, `security review`, `architecture review`, `debug`, `refactor`, `API design`, `unit test` — including Indonesian equivalents (`buatin fitur`, `kerjain sesuai plan`, `cek security`, `bikin unit test`).
 
 Does not trigger for: commit messages, one-liners, `cat file`, SQL one-offs, translations.
 
@@ -99,9 +99,9 @@ npx skills add miqdadbadjuber/anti-slop
 | Agent | File | Role |
 |---|---|---|
 | 🧩 **Decomposer** | `decomposer.md` | Breaks a large PRD into discrete `task-N.md` files by domain boundary. Does not plan, does not execute. Stops for human review before passing to Planner. |
-| 🧠 **Planner** | `planner.md` | Produces `prd.md` — a complete, unambiguous spec covering necessity check (YAGNI+DRY), security, performance, observability, testability, and UI/UX. Does not write code. |
+| 🧠 **Planner** | `planner.md` | Produces `plan.md` — a complete, unambiguous spec covering necessity check (YAGNI+DRY), security, performance, observability, testability, and UI/UX. Does not write code. |
 | 🔍 **Doubt Review** | `doubt-review.md` | Adversarial spec reviewer. Finds hidden assumptions, scope creep, and missing edge cases before execution. Cheap to run; expensive to skip. |
-| ⚙️ **Executor** | `executor.md` | Implements `prd.md` step by step. Stops and asks on ambiguity. Never improvises. |
+| ⚙️ **Executor** | `executor.md` | Implements `plan.md` step by step. Stops and asks on ambiguity. Never improvises. |
 | 🧪 **Unit Test Writer** | `unit-test-writer.md` | Reads the spec, produces a Test Plan (human-approved), then generates test code for the detected stack. Sits between Executor and QA. |
 | 🔍 **QA** | `qa.md` | Verifies implementation against spec — compliance, breaking changes, Definition of Done, code quality. Records evidence. Issues PASS / FAIL / PASS WITH WARNINGS. Writes TECH-DEBT.md for anything intentionally deferred. |
 
@@ -166,7 +166,7 @@ Every agent can be called independently. Need only a security audit? Run Securit
 
 1. Pick a mode and record it in `status.md`.
 2. **Large PRD?** Decomposer first — break into `task-N.md`, review, then continue.
-3. **Planner** — describe the feature. Get `prd.md`.
+3. **Planner** — describe the feature. Get `plan.md`.
 4. **Doubt Review** — if the spec touches anything risky.
 5. **Executor** — implements per spec, one step at a time.
 6. **Unit Test Writer** — for non-trivial logic: Test Plan → approval → test code.

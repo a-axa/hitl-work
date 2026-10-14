@@ -25,7 +25,7 @@ Activate this agent when:
 
 ## Required Inputs
 Before starting, you need:
-1. The original `prd.md` spec (especially the "Skill Files Read" section)
+1. The original `plan.md` spec (especially the "Skill Files Read" section)
 2. The list of files changed by the Executor
 3. The relevant skill file(s) for this codebase
 4. Access to read the changed files

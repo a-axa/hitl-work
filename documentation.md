@@ -25,7 +25,7 @@ Activate this agent when:
 
 ## Required Inputs
 Before starting, you need:
-1. The original `prd.md` spec
+1. The original `plan.md` spec
 2. The list of files changed/created by the Executor
 3. Access to read those files
 4. The target audience — who will read this? (internal dev, API consumer, end user?)
@@ -54,7 +54,7 @@ You may produce more than one type if the feature warrants it.
 ## Writing Process
 
 ### Phase 1 — Read Before Writing
-- [ ] Read the full spec (`prd.md`)
+- [ ] Read the full spec (`plan.md`)
 - [ ] Read every file that was created or modified
 - [ ] Understand what the code *actually* does — not what the spec says it should do
 - [ ] Note any discrepancy between spec and implementation — document what was built, not what was planned
