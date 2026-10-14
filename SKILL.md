@@ -26,6 +26,18 @@ Store feature artifacts in that directory: `prd.md`, `doubt-review.md`, `test-pl
 - Code needs triage -> **Debug**
 - Markdown spec to test -> **Unit Test Writer**
 
+## Companion Skill: anti-slop (opt-in)
+
+HITL·Work pairs well with [anti-slop](https://github.com/miqdadbadjuber/anti-slop), a skill set that filters generic AI-generated code, UI, and copy. Integration is strictly opt-in and detected once per project:
+
+1. **Detect.** Before the first agent runs, check whether the anti-slop skill is already installed: run `npx skills list` and look for `antislop`/`anti-slop`, or inspect the active agent's skill directories (`.claude/skills/`, `.agents/skills/`, `~/.claude/skills/`, `~/.agents/skills/`, or the equivalent). Record the outcome in `.hitl-work/preferences.md` so detection never runs twice for the same project.
+2. **Offer, never auto-install.** If anti-slop is absent and no preference is saved, ask the user: "anti-slop is not installed. Install it and combine with HITL·Work so QA and Documentation also check outputs for AI slop?" Accept `yes` / `yes, always` / `no` / `never ask again`. Never install without an explicit yes.
+   - `yes` → run `npx skills add miqdadbadjuber/anti-slop`; record `antislop: installed` in `.hitl-work/preferences.md`.
+   - `yes, always` → same as `yes`, plus record the preference in `~/.hitl-work/preferences.md` so future projects skip the question entirely.
+   - `no` → continue without it; record `antislop: declined` for this project.
+   - `never ask again` → record globally in `~/.hitl-work/preferences.md`; never offer again.
+3. **Combine only when present.** When the anti-slop skill is available (pre-installed or just installed), the QA and Documentation agents must read its core rules and add an explicit slop check to their verdicts: reject generic AI-pattern code, copy, and UI. Note: `npx skills add` copies the skill folders but does not write a session auto-load pointer; HITL·Work agents load the anti-slop rules explicitly, so no pointer is needed.
+
 ## Agents
 
 | Agent | File | When |
