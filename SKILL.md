@@ -37,7 +37,7 @@ HITL·Work pairs well with [anti-slop](https://github.com/miqdadbadjuber/anti-sl
    - `no` → record `antislop: declined` in `.hitl-work/preferences.md`; continue without it.
    - `never ask again` → record in `~/.hitl-work/preferences.md`; never run this gate again on any project.
    Only after the answer is recorded may the pipeline continue.
-3. **Combine only when present.** When the anti-slop skill is available (pre-installed or just installed), the QA and Documentation agents must read its core rules and add an explicit slop check to their verdicts: reject generic AI-pattern code, copy, and UI. Note: `npx skills add` copies the skill folders but does not write a session auto-load pointer; HITL·Work agents load the anti-slop rules explicitly, so no pointer is needed.
+3. **Combine only when present.** When the anti-slop skill is available (pre-installed or just installed), the Planner, QA, and Documentation agents must read its core rules. The Planner applies them while writing `plan.md` (see the Anti-slop hard rules in `planner.md`); QA and Documentation add an explicit slop check to their verdicts: reject generic AI-pattern code, copy, and UI. Note: `npx skills add` copies the skill folders but does not write a session auto-load pointer; HITL·Work agents load the anti-slop rules explicitly, so no pointer is needed.
 
 ## Agents
 

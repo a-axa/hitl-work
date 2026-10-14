@@ -785,3 +785,12 @@ Before handing off, self-check every item below. If any answer is NO → revise 
 - ALWAYS ensure terminology matches existing modules
 - ALWAYS spec per-field inline validation for forms
 - ALWAYS check that color is not the sole indicator of status — pair with text or icon
+
+### Anti-slop
+- NEVER use vague language in the spec ("robust solution", "seamless", "leverage", "handle errors appropriately") — every behavior must be stated concretely enough that QA can verify it
+- NEVER include marketing filler, motivational fluff, or restated obvious facts
+- NEVER spec speculative scope ("may also support", "in the future", options nobody asked for)
+- NEVER leave acceptance criteria unfalsifiable — a reader must be able to tell done from not-done
+- ALWAYS prefer the concrete verb over the abstract noun ("retry 3 times with backoff", not "resilient handling")
+- If the anti-slop skill is available (see the Companion Skill section in SKILL.md), read its core rules and apply them to `plan.md` before finalizing
+- ALWAYS do a final anti-slop pass over `plan.md` before handoff: cut every sentence that does not change what the Executor must do
