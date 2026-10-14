@@ -28,14 +28,15 @@ Store feature artifacts in that directory: `prd.md`, `doubt-review.md`, `test-pl
 
 ## Companion Skill: anti-slop (opt-in)
 
-HITL·Work pairs well with [anti-slop](https://github.com/miqdadbadjuber/anti-slop), a skill set that filters generic AI-generated code, UI, and copy. Integration is strictly opt-in and detected once per project:
+HITL·Work pairs well with [anti-slop](https://github.com/miqdadbadjuber/anti-slop), a skill set that filters generic AI-generated code, UI, and copy. Integration is strictly opt-in. Run this gate ONCE per project, BEFORE any agent runs:
 
-1. **Detect.** Before the first agent runs, check whether the anti-slop skill is already installed: run `npx skills list` and look for `antislop`/`anti-slop`, or inspect the active agent's skill directories (`.claude/skills/`, `.agents/skills/`, `~/.claude/skills/`, `~/.agents/skills/`, or the equivalent). Record the outcome in `.hitl-work/preferences.md` so detection never runs twice for the same project.
-2. **Offer, never auto-install.** If anti-slop is absent and no preference is saved, ask the user: "anti-slop is not installed. Install it and combine with HITL·Work so QA and Documentation also check outputs for AI slop?" Accept `yes` / `yes, always` / `no` / `never ask again`. Never install without an explicit yes.
+1. **Detect.** Run `npx skills list | grep -i antislop`. If nothing matches, inspect the active agent's skill directories (`.claude/skills/`, `.agents/skills/`, `~/.claude/skills/`, `~/.agents/skills/`, or the equivalent). The result must be exactly one of: INSTALLED or NOT INSTALLED. Write the result to `.hitl-work/preferences.md` (create `.hitl-work/` and the file if they do not exist).
+2. **Gate.** If the result is NOT INSTALLED and `.hitl-work/preferences.md` contains no `antislop:` entry: STOP. Do not start the Planner, Executor, QA, or any other agent. Ask the user exactly this: "anti-slop is not installed. Install it and combine with HITL·Work so QA and Documentation also check outputs for AI slop? (yes / yes, always / no / never ask again)". Wait for the user's answer, then:
    - `yes` → run `npx skills add miqdadbadjuber/anti-slop`; record `antislop: installed` in `.hitl-work/preferences.md`.
-   - `yes, always` → same as `yes`, plus record the preference in `~/.hitl-work/preferences.md` so future projects skip the question entirely.
-   - `no` → continue without it; record `antislop: declined` for this project.
-   - `never ask again` → record globally in `~/.hitl-work/preferences.md`; never offer again.
+   - `yes, always` → same as `yes`, plus record in `~/.hitl-work/preferences.md` so future projects skip this gate.
+   - `no` → record `antislop: declined` in `.hitl-work/preferences.md`; continue without it.
+   - `never ask again` → record in `~/.hitl-work/preferences.md`; never run this gate again on any project.
+   Only after the answer is recorded may the pipeline continue.
 3. **Combine only when present.** When the anti-slop skill is available (pre-installed or just installed), the QA and Documentation agents must read its core rules and add an explicit slop check to their verdicts: reject generic AI-pattern code, copy, and UI. Note: `npx skills add` copies the skill folders but does not write a session auto-load pointer; HITL·Work agents load the anti-slop rules explicitly, so no pointer is needed.
 
 ## Agents
