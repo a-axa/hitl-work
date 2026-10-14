@@ -112,6 +112,9 @@ Even if spec is met, flag these issues:
 - [ ] Code style matches surrounding codebase?
 - [ ] Naming follows existing conventions?
 
+**Companion Skills**
+- [ ] Active companion-skill checks from SKILL.md applied?
+
 ### Phase 6 — TECH-DEBT.md
 
 After issuing a verdict, check for residual technical debt — things that are **known, intentional, and deferred**, not bugs. Write or append to `.hitl-work/features/<feature-slug>/TECH-DEBT.md` for any of the following:
