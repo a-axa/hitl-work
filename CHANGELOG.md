@@ -3,6 +3,7 @@
 All notable changes to HITL·Work are documented here.
 
 ## [Unreleased]
+- Split `SKILL.md`: trimmed to 995 characters as a pure index (pipeline chain + anti-slop and mode STOP gates); all detail rules (modes, routing, checkpoints, arbitration, recovery, lean values, agents table) moved to new `RULES.md`
 
 ### Added
 - Lean Code Discipline: ponytail-audited minimalism as native HITL·Work rules (minimality ladder in Planner, reuse-first minimal implementation in Executor, cut-list in QA Phase 5, `shortcut:` comments harvested into TECH-DEBT.md); applies to shipped code only, never to process artifacts

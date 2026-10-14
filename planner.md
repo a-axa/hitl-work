@@ -792,5 +792,5 @@ Before handing off, self-check every item below. If any answer is NO → revise 
 - NEVER spec speculative scope ("may also support", "in the future", options nobody asked for)
 - NEVER leave acceptance criteria unfalsifiable — a reader must be able to tell done from not-done
 - ALWAYS prefer the concrete verb over the abstract noun ("retry 3 times with backoff", not "resilient handling")
-- If the anti-slop skill is available (see the Companion Skill section in SKILL.md), read its core rules and apply them to `plan.md` before finalizing
+- If the anti-slop skill is available (see the Companion Skill section in RULES.md), read its core rules and apply them to `plan.md` before finalizing
 - ALWAYS do a final anti-slop pass over `plan.md` before handoff: cut every sentence that does not change what the Executor must do
