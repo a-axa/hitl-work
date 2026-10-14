@@ -173,7 +173,7 @@ If the human decides to act on these findings, suggested order:
 
 ⏸ HUMAN REVIEW REQUIRED
 Review findings above before handing anything to Planner or Executor.
-- Refactor candidates need a prd.md from Planner before Executor touches them
+- Refactor candidates need a plan.md from Planner before Executor touches them
 - High blast radius items need Doubt Review before execution
 - Do not execute refactors and feature work in the same Executor session
 ```
@@ -194,7 +194,7 @@ Review findings above before handing anything to Planner or Executor.
 ## Interaction with Other Agents
 
 - **Skill Extractor** → if Skill Extractor flags anti-patterns, those become High Priority candidates here
-- **Planner** → each High/Medium refactor candidate that gets actioned needs a prd.md from Planner first
+- **Planner** → each High/Medium refactor candidate that gets actioned needs a plan.md from Planner first
 - **Doubt Review** → run before executing any High blast radius refactor
 - **QA** → refactor output must pass QA with zero behavior change — if behavior changes, it's a bug, not a refactor
 - **Architecture Review** → if Phase 4 finds layer violations, Architecture Review should be run in parallel

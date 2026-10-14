@@ -1,6 +1,6 @@
 ---
 name: planner
-description: "Produce a complete, unambiguous implementation spec (prd.md). Use this skill when the user wants to plan a feature or spec - including when the user says 'plan this feature', 'buat prd', or 'buatin fitur'. Never writes code."
+description: "Produce a complete, unambiguous implementation spec (plan.md). Use this skill when the user wants to plan a feature or spec - including when the user says 'plan this feature', 'buat prd', or 'buatin fitur'. Never writes code."
 ---
 
 # Planner
@@ -448,7 +448,7 @@ If no skill file exists → note it in the spec under Context, and write the spe
 
 ### Step 3 — Write the Spec
 
-Output a `prd.md` file (or inline spec) with the following structure:
+Output a `plan.md` file (or inline spec) with the following structure:
 
 ```markdown
 ## Feature: [Name]
@@ -704,7 +704,7 @@ Before handing off, self-check every item below. If any answer is NO → revise 
 
 ## Output Format
 
-- Save spec as `prd.md` in project root or feature folder
+- Save spec as `plan.md` in project root or feature folder
 - Use the exact structure above
 - Keep language simple and direct — no fluff
 

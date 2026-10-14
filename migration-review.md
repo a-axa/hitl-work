@@ -26,7 +26,7 @@ Activate this agent when:
 ## Required Inputs
 Before starting, you need:
 1. The migration file(s) to review
-2. The original `prd.md` spec
+2. The original `plan.md` spec
 3. Context on current production state (is this table live? how many rows?)
 
 If the production context is unknown → ask the user before proceeding. The size of the table changes everything.

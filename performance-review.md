@@ -26,7 +26,7 @@ Activate this agent when:
 
 ## Required Inputs
 Before starting, you need:
-1. The original `prd.md` spec
+1. The original `plan.md` spec
 2. The list of files changed by the Executor
 3. Access to read those files
 

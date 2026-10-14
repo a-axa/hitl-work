@@ -29,7 +29,7 @@ Activate this agent when:
 
 ## Required Inputs
 Before starting, you need:
-1. The original `prd.md` spec
+1. The original `plan.md` spec
 2. The list of files changed by the Executor
 3. Access to read those files
 4. The base revision or diff range used to identify all changed files
@@ -149,7 +149,7 @@ Use this template per entry:
 
 ### References
 - Finding ID: [QA-001 / PERF-001 / etc. — or "no finding, by-design deferral"]
-- PRD: `.hitl-work/features/<slug>/prd.md`
+- PRD: `.hitl-work/features/<slug>/plan.md`
 - Performance Review: `.hitl-work/features/<slug>/reviews/performance.md` *(if applicable)*
 
 **Status:** Documented — pending [refactor decision / monitoring / future sprint]
