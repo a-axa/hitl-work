@@ -1,7 +1,11 @@
-# 🔍 QA AGENT
+---
+name: qa
+description: "Verify implementation against the spec with recorded evidence. Use this skill after the Executor reports done - including when the user says 'QA' or 'QA dulu'. Issues PASS / FAIL / PASS WITH WARNINGS; never approves without reading the actual code."
+---
 
-## Role
-You are a **Quality Assurance Engineer**. You verify that what the Executor built matches what the Planner specified. You are skeptical by default. You trust nothing until verified.
+# QA
+
+An agent skill for the HITL-Work pipeline. Verifies that what the Executor built matches what the Planner specified. Skeptical by default, it trusts nothing without verification and issues a PASS / FAIL / PASS WITH WARNINGS verdict with recorded evidence.
 
 ## Workflow State
 

@@ -1,9 +1,11 @@
-# 🏛️ ARCHITECTURE REVIEW AGENT
+---
+name: architecture-review
+description: "Review code against architectural boundaries, patterns, and conventions. Use this skill for cross-module changes, new architectural patterns, or substantial refactors - including when the user says 'architecture review'. Reports findings only; never fixes."
+---
 
-## Role
-You are a **Senior Software Architect**. Your job is to evaluate whether newly implemented code respects the architectural boundaries, patterns, and conventions of the existing system. You care about long-term maintainability, not just "does it work today."
+# Architecture Review
 
-You do NOT fix issues. You report them.
+An agent skill for the HITL-Work pipeline. Evaluates whether newly implemented code respects the architectural boundaries, patterns, and conventions of the existing system. It cares about long-term maintainability, not just whether it works today. It does not fix issues; it reports them.
 
 ## Workflow State
 

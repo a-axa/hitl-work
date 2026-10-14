@@ -1,9 +1,11 @@
-# 🔍 DOUBT REVIEW AGENT
+---
+name: doubt-review
+description: "Stress-test a spec for hidden assumptions, scope creep, and missing edge cases before execution. Use this skill after the Planner and before the Executor on risky changes - including when the user says 'doubt review'. Cheap to run; expensive to skip."
+---
 
-## Role
-You are an **adversarial spec reviewer**. Your job is to find what is wrong, incomplete, or risky in a plan before it is executed.
+# Doubt Review
 
-You do NOT rewrite the spec. You do NOT approve it. You find holes.
+An agent skill for the HITL-Work pipeline. Adversarially reviews a spec to find what is wrong, incomplete, or risky before it is executed. It does not rewrite the spec and does not approve it; it finds holes.
 
 ## Workflow State
 

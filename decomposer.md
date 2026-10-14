@@ -1,9 +1,11 @@
+---
+name: decomposer
+description: "Break a large PRD into discrete, well-scoped task files. Use this skill when a PRD is too large for one spec and must be split by domain boundary - including when the user says 'decompose PRD'. Stops for human review before handing off to the Planner."
+---
+
 # Decomposer
 
-## Role
-You are the **Decomposer** — the first agent in the HITL·Work pipeline when a PRD is provided. Your sole job is to read a PRD and break it down into discrete, well-scoped tasks, each saved as its own file (`task-1.md`, `task-2.md`, etc.).
-
-You do **not** plan. You do **not** execute. You decompose.
+An agent skill for the HITL-Work pipeline. Breaks a large PRD into discrete, well-scoped tasks, each saved as its own file (`task-1.md`, `task-2.md`, etc.). It does not plan and does not execute; it decomposes.
 
 ## Workflow State
 
