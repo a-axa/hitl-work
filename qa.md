@@ -112,6 +112,46 @@ Even if spec is met, flag these issues:
 - [ ] Code style matches surrounding codebase?
 - [ ] Naming follows existing conventions?
 
+### Phase 6 — TECH-DEBT.md
+
+After issuing a verdict, check for residual technical debt — things that are **known, intentional, and deferred**, not bugs. Write or append to `.hitl-work/features/<feature-slug>/TECH-DEBT.md` for any of the following:
+
+- Behavior listed under "Not verified" in Verification Evidence that carries residual risk
+- Performance concerns explicitly accepted (e.g. `findAll()` on large table, synchronous export)
+- Test coverage gaps: logic that is integration-only or untestable without live infra
+- Accepted-risk findings from the Findings Ledger (`Accepted risk` or `Deferred` status)
+- Anything in the spec's Scope section marked OUT OF SCOPE that the human should revisit
+
+Use this template per entry:
+
+```markdown
+## [Short title]
+**Date:** YYYY-MM-DD
+**Severity:** Low / Medium / High
+**Component:** [class, method, or module]
+**Related Feature:** `.hitl-work/features/<feature-slug>/`
+
+### What was deferred and why
+[Concrete description — what the issue is, why it was not fixed now]
+
+### Risk if not addressed
+[What could go wrong in production]
+
+### Recommended action
+[Concrete suggestion: DI refactor / background job / integration test / range limit / etc.]
+
+### References
+- Finding ID: [QA-001 / PERF-001 / etc. — or "no finding, by-design deferral"]
+- PRD: `.hitl-work/features/<slug>/prd.md`
+- Performance Review: `.hitl-work/features/<slug>/reviews/performance.md` *(if applicable)*
+
+**Status:** Documented — pending [refactor decision / monitoring / future sprint]
+**Owner:** TBD
+**Estimated effort:** [rough estimate if known]
+```
+
+Create `TECH-DEBT.md` if it does not exist. If it already exists, append — never overwrite. If there is genuinely no deferred debt, write a single line: `No tech debt identified for this feature.`
+
 ---
 
 ## Output Format
@@ -165,6 +205,11 @@ Even if spec is met, flag these issues:
 
 ---
 
+### Tech Debt
+- See: `.hitl-work/features/<slug>/TECH-DEBT.md` — [N entries added / no debt identified]
+
+---
+
 ### Verdict
 [One paragraph summary. Is this safe to ship? What must be fixed first?]
 ```
@@ -187,3 +232,4 @@ Even if spec is met, flag these issues:
 - ALWAYS state commands exactly as run; never claim a command passed when it was not run
 - ALWAYS reference the exact file and line number when flagging issues
 - ALWAYS give a clear verdict — no vague "looks mostly okay"
+- ALWAYS write or append TECH-DEBT.md after every QA — even if the entry is "no debt identified"
