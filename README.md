@@ -1,171 +1,158 @@
-# Multi-Agent Development Workflow (HITL·Work)
-Most AI coding workflows collapse into one prompt doing everything. HITL·Work splits it: 17 agents, each with a single responsibility — so cheap models can do senior-engineer work.
-Each .md file is an independent system prompt for a single role. One agent, one responsibility. Planner doesn't write code. Executor doesn't think about architecture. QA trusts nothing without verification.
+# HITL·Work — Structured Vibe Coding
+
+Vibe coding is fast. It's also how you ship bugs, lose context between sessions, and end up with code nobody can audit — including yourself.
+
+HITL·Work keeps the speed. It adds structure.
+
+17 agents. Each with one job. The Planner never writes code. The Executor never improvises. QA never approves without reading the actual code. Every decision lands in a file. Every session picks up exactly where the last one ended.
+
+---
+
+## What you get
+
+**Speed without chaos.** You still move fast — the pipeline removes friction, not velocity. Planner writes the spec so Executor doesn't have to think. Executor follows the spec so QA doesn't have to guess.
+
+**A paper trail by design.** Every feature produces a folder:
+
+```
+.hitl-work/features/your-feature/
+  status.md          ← source of truth across sessions
+  prd.md             ← the plan
+  doubt-review.md    ← stress-test before execution
+  test-plan.md       ← approved before test code is written
+  qa-report.md       ← verdict with evidence
+  reviews/           ← security, performance, migration
+  TECH-DEBT.md       ← what was deferred and why
+```
+
+Six months later, you open that folder and reconstruct the full decision history — what was planned, what was questioned, what was verified, what was intentionally left for later.
+
+**Cheap models where the work is mechanical. Strong models where it matters.** The Executor follows a spec. It doesn't need to reason about architecture — so you can run it on a smaller model. The Planner and reviewers need judgment — use a stronger one there.
+
+**Context survives session boundaries.** `status.md` is updated at every handoff. The next session reads it and knows exactly where things stand — what's approved, what's open, what's blocked.
+
+---
+
+## Pipeline
+
+```
+(Decomposer) → Planner → (Doubt Review) → Executor → (Unit Test Writer) → QA → (Specialist Reviews) → Documentation
+```
+
+Three modes — pick the lowest safe one:
+
+| Mode | Use for |
+|---|---|
+| 🔴 **Full Pipeline** | New feature, migration, security surface, unclear scope |
+| 🟡 **Standard** | Scoped bug fix or enhancement, 1–2 files, no high-risk surface |
+| 🟢 **Quick** | Typo, config correction, isolated one-file hotfix |
+
+Quick mode is not permitted for migrations, auth/authz, external APIs, DB queries, or anything touching more than one file. If a risk signal appears mid-execution, escalate immediately.
+
+---
 
 ## 📦 Install as Skill
 
-### Via `npx skills` (recommended)
-
 ```bash
-# Install permanent ke project (recommended)
+# Permanent install for this project
 npx skills add "https://github.com/iskandar221201/hitl-work" --skill hitl-work
 
-# Install global (semua project)
+# Global install (all projects)
 npx skills add "https://github.com/iskandar221201/hitl-work" --skill hitl-work -g
 
-# One-shot tanpa install (inject ke sesi ini saja)
+# One-shot without installing
 npx skills use "https://github.com/iskandar221201/hitl-work" --skill hitl-work
 ```
 
-### Verify
-
 ```bash
-npx skills list          # project-level
-npx skills list -g       # global
+npx skills list       # verify project-level
+npx skills list -g    # verify global
 ```
 
-> Skill trigger otomatis saat prompt menyebut: `plan this feature`, `decompose PRD`, `buat prd`, `execute prd.md`, `QA`, `doubt review`, `security review`, `architecture review`, `debug`, `refactor`, `API design`, `unit test` — termasuk padanan Indonesia (`buatin fitur`, `kerjain sesuai prd`, `cek security`, `bikin unit test`) — dan tidak trigger untuk one-liner seperti `commit message`, `cat file`, atau `translate`.
+Triggers automatically on: `plan this feature`, `decompose PRD`, `buat prd`, `execute prd.md`, `QA`, `doubt review`, `security review`, `architecture review`, `debug`, `refactor`, `API design`, `unit test` — including Indonesian equivalents (`buatin fitur`, `kerjain sesuai prd`, `cek security`, `bikin unit test`).
+
+Does not trigger for: commit messages, one-liners, `cat file`, SQL one-offs, translations.
 
 ---
 
-## Main Pipeline
-
-```
-(Decomposer) → Planner → (Doubt Review) → Executor → (Unit Test Writer) → QA → (Review specialists) → Documentation
-```
-
-### Workflow Modes
-
-Choose the lowest safe mode and record it in `status.md`. A mode must escalate immediately when a risk trigger appears.
-
-| Mode | Best for | Required flow |
-|---|---|---|
-| 🔴 **Full Pipeline** | New feature, multi-module work, migrations, security-sensitive changes, external integrations, unclear or high-blast-radius work | Full Planner, routing-required reviews, Executor, applicable tests, QA |
-| 🟡 **Standard** | Understood bug fix or enhancement, normally 1–2 files, no high-risk surface | Planner Lite, Executor, QA; add reviews only when routing requires them |
-| 🟢 **Quick** | Typo, documentation-only correction, known-safe config adjustment, or isolated one-file hotfix | Executor with a Quick Change Record, then minimal QA |
-
-Quick mode is **not** permitted for migrations, secrets, auth/authz, security-sensitive input, external APIs, dependencies, public contracts, DB queries, unclear root causes, or a change needing more than one file. If any condition appears, escalate to Standard or Full.
-
-Planner Lite is a five-section spec: **Scope, Files to Modify, Steps, Breaking Changes, Definition of Done**. It is not a shortcut around a required review.
-
-### Feature Artifact Convention
-
-For every non-trivial feature, create `.hitl-work/features/<feature-slug>/` and copy `workflow-state.template.md` to `status.md`. Keep all artifacts for that feature together:
-
-```text
-.hitl-work/features/<feature-slug>/
-  status.md
-  prd.md
-  doubt-review.md
-  test-plan.md
-  qa-report.md
-  reviews/
-    security.md
-    performance.md
-```
-
-`status.md` is the source of truth for required routing, handoffs, findings, and verification evidence. It prevents a later session from treating an incomplete review as finished.
-
-0. **Decomposer** *(optional, for large-scope inputs)* — if the input is a large PRD spanning many modules, break it into discrete tasks (`task-1.md`, `task-2.md`, ...) before passing to the Planner.
-1. **Planner** produces a detailed, unambiguous spec (`prd.md`) — per task (if routed through Decomposer) or directly from a feature request.
-2. **Doubt Review** — required for schema/data changes; otherwise optional but recommended. It stress-tests the spec before execution and surfaces hidden assumptions, missed edge cases, and scope creep.
-3. **Executor** implements exactly per spec — no improvisation.
-4. **Unit Test Writer** — required for non-trivial business logic. It produces a human-approved Test Plan, then test code that feeds QA.
-5. **QA** verifies implementation against the spec and records test/build/manual-verification evidence.
-6. Required review specialists run based on the routing table below. They report findings only; the Executor fixes approved findings, then QA re-verifies.
-7. **Documentation** & **Skill Extractor** close the cycle only after all blocking findings are closed or explicitly accepted by the human.
-
----
-
-## Agent List
-
-### Intake
-
-| Agent | File | Role |
-|---|---|---|
-| 🧩 **Decomposer** | `decomposer.md` | First agent in the pipeline for large PRD inputs. Reads the PRD and breaks it into discrete tasks by domain/functional boundary (not implementation steps), each saved as `task-N.md` with Goal + Context fields (including inter-task dependencies). Does not plan, does not execute — purely decomposition. Always stops for human review before tasks are passed to the Planner. |
+## Agents
 
 ### Core Pipeline
 
 | Agent | File | Role |
 |---|---|---|
-| 🧠 **Planner** | `planner.md` | Senior Software Architect. Translates a feature request (or a single `task-N.md` from the Decomposer) into a complete implementation spec (`prd.md`) — covering necessity check (YAGNI+DRY), reusability assessment, security/performance/observability/UI-UX considerations. Does not write code. |
-| ⚙️ **Executor** | `executor.md` | Meticulous Implementation Engineer. Executes `prd.md` step by step, without improvisation. Stops and asks when a step is ambiguous or blocked. |
-| 🧪 **Unit Test Writer** | `unit-test-writer.md` | Test engineer. Reads a markdown spec (SKILL.md, feature doc, API contract) and produces a structured Test Plan first — stops for human approval — then generates test code adapted to the detected stack (PHPUnit, Go testing, Jest, PyTest, etc.). Sits between Executor and QA; its output becomes QA's verification baseline. |
-| 🔍 **QA** | `qa.md` | Quality Assurance Engineer. Verifies Executor output against the spec — spec compliance, breaking changes, Definition of Done, and baseline code quality (logic, security, side effects, consistency). If Unit Test Writer ran, uses generated tests as part of verification. |
+| 🧩 **Decomposer** | `decomposer.md` | Breaks a large PRD into discrete `task-N.md` files by domain boundary. Does not plan, does not execute. Stops for human review before passing to Planner. |
+| 🧠 **Planner** | `planner.md` | Produces `prd.md` — a complete, unambiguous spec covering necessity check (YAGNI+DRY), security, performance, observability, testability, and UI/UX. Does not write code. |
+| 🔍 **Doubt Review** | `doubt-review.md` | Adversarial spec reviewer. Finds hidden assumptions, scope creep, and missing edge cases before execution. Cheap to run; expensive to skip. |
+| ⚙️ **Executor** | `executor.md` | Implements `prd.md` step by step. Stops and asks on ambiguity. Never improvises. |
+| 🧪 **Unit Test Writer** | `unit-test-writer.md` | Reads the spec, produces a Test Plan (human-approved), then generates test code for the detected stack. Sits between Executor and QA. |
+| 🔍 **QA** | `qa.md` | Verifies implementation against spec — compliance, breaking changes, Definition of Done, code quality. Records evidence. Issues PASS / FAIL / PASS WITH WARNINGS. Writes TECH-DEBT.md for anything intentionally deferred. |
 
-### Pre-Execution Review
+### Specialist Reviews
 
-| Agent | File | Role |
-|---|---|---|
-| 🔍 **Doubt Review** | `doubt-review.md` | Adversarial spec reviewer. Runs after the Planner, before the Executor. Finds hidden assumptions, scope creep, irreversible steps, missing edge cases, and ambiguities — before any code is written. |
-
-### Post-Execution Review Specialists
-
-Run after the Executor finishes, typically in parallel with or after QA. All agents in this category **report issues only — they do not fix them**.
+Run after Executor. Report findings only — never fix.
 
 | Agent | File | Focus |
 |---|---|---|
-| 🏛️ **Architecture Review** | `architecture-review.md` | Skill file compliance, layer boundaries (Controller/Service/Model), dependency direction, duplication vs. reuse, long-term maintainability. |
-| 🔒 **Security Review** | `security-review.md` | Attack surface, input validation, auth/authz, data exposure, hardcoded secrets, dependency risk. |
-| ⚡ **Performance Review** | `performance-review.md` | N+1 queries, indexing, caching, memory usage, external call resilience, scalability at 10x–100x load. |
-| 🗄️ **Migration Review** | `migration-review.md` | Database migration safety — operation risk classification, rollback safety, data integrity, locking risk, backward compatibility. |
-| ♻️ **Refactor Agent** | `refactor-agent.md` | Identifies abstraction opportunities, readability issues, over-engineering, and coupling — without changing behavior. Produces a prioritized refactor plan, not code. |
-
-### UI/UX Specialists
-
-| Agent | File | Role |
-|---|---|---|
-| 🎨 **UI/UX Planner** | `ui-ux-planner.md` | Called by the main Planner when UI complexity is high. Produces a precise UI spec — color/spacing tokens, components to reuse, states (loading/empty/error) — so the Executor doesn't guess at visuals. |
-| 🧩 **UI Skill Extractor** | `ui-skill-extractor.md` | Reads QA-approved UI implementation and extracts/updates the project's visual skill file (`skills/[project]-ui.md`) — tokens, components, anti-patterns — so future UI audits don't start from scratch. |
+| 🏛️ **Architecture Review** | `architecture-review.md` | Layer boundaries, dependency direction, duplication vs. reuse |
+| 🔒 **Security Review** | `security-review.md` | Auth/authz, input validation, data exposure, secrets |
+| ⚡ **Performance Review** | `performance-review.md` | N+1, indexing, caching, memory, scalability |
+| 🗄️ **Migration Review** | `migration-review.md` | Migration safety, rollback, locking risk, data integrity |
+| ♻️ **Refactor Agent** | `refactor-agent.md` | Abstraction opportunities, coupling, readability — produces a plan, not code |
+| 🎨 **UI/UX Planner** | `ui-ux-planner.md` | UI spec: tokens, component reuse, loading/empty/error states |
+| 🧩 **UI Skill Extractor** | `ui-skill-extractor.md` | Extracts visual patterns into a reusable skill file after QA |
 
 ### Supporting Agents
 
 | Agent | File | Role |
 |---|---|---|
-| 🔌 **API Agent** | `api-agent.md` | Senior API Architect with 3 modes: **DESIGN** (create new API contracts), **INTEGRATION** (spec for consuming external APIs — resilience, retry, circuit breaker), **AUDIT** (review existing APIs/integrations). |
-| 🐛 **Debug Agent** | `debug.md` | Debug investigator. Finds root causes through config-vs-bug triage, execution tracing, and evidence-backed hypotheses. Does not write fixes — produces a precise handoff to the Executor. |
-| 📚 **Skill Extractor** | `skill-extractor.md` | Observes existing code and distills patterns into a `skill.md` — folder structure, naming conventions, anti-patterns — read by all other agents before working in the codebase. |
-| 📖 **Documentation** | `documentation.md` | Technical writer. Writes documentation (API reference, module docs, feature guides, changelog) based on what was *actually implemented*, not what was planned. |
+| 🔌 **API Agent** | `api-agent.md` | DESIGN / INTEGRATION / AUDIT of HTTP APIs |
+| 🐛 **Debug Agent** | `debug.md` | Root-cause investigation. Does not fix — produces a handoff to Executor. |
+| 📚 **Skill Extractor** | `skill-extractor.md` | Distills codebase patterns into `skill.md` — read by all agents before acting |
+| 📖 **Documentation** | `documentation.md` | Writes docs from what was actually built, not what was planned |
 
 ---
 
-## Why Separate Agents?
+## Required Routing
 
-- **Narrow scope → more reliable output.** Models (especially cheaper ones) perform better when the instruction is "only check security" rather than "check everything at once."
-- **Cheap models for Executor, stronger models for Planner/Review.** Since the Executor just follows a detailed spec, it doesn't need heavy reasoning — as long as the spec is complete.
-- **Every agent can be called independently.** Just need a security audit? Call Security Review without running the full pipeline. Just have a spec? Run Unit Test Writer standalone.
-- **Skill files as shared memory.** `skill-extractor.md` and `ui-skill-extractor.md` prevent each Planner/Executor from having to re-audit the codebase from scratch every time.
+Some changes require specific agents regardless of mode. Record skips in `status.md` with human-accepted rationale.
 
----
-
-## How to Use
-
-1. **Large PRD with many modules?** Start with the **Decomposer** — break it into `task-N.md` per domain/module, review and agree on the task list before continuing.
-2. For each task (or directly, if scope is small) — start with the **Planner**, describe the feature/bug to address.
-3. If the spec touches anything risky (multi-tenant, DB migration, live users) → run **Doubt Review** before proceeding to the Executor.
-4. **Executor** implements per `prd.md`.
-5. For non-trivial logic → run **Unit Test Writer**: pass the spec/SKILL.md, review the Test Plan, approve, then get the test code.
-6. **QA** verifies — using Unit Test Writer output as baseline if available.
-7. Run relevant review specialists (e.g., DB migration involved → Migration Review; new endpoint → Security + API Agent AUDIT).
-8. Once everything passes → **Documentation** & **Skill Extractor** (or **UI Skill Extractor** for UI features) to close the cycle.
-
-### Required Routing
-
-| Change condition | Required stages |
+| Condition | Required |
 |---|---|
 | New endpoint, auth/authz, webhook, user-controlled input, external API | Security Review |
 | Schema change, index, backfill, data migration | Doubt Review + Migration Review |
-| New query, bulk operation, cache, queue/job, high-traffic endpoint | Performance Review |
+| New query, bulk operation, caching, queue/job, high-traffic endpoint | Performance Review |
 | Cross-module change, new architectural pattern, substantial refactor | Architecture Review |
-| New screen, critical UI flow, reusable UI component, substantial redesign | UI/UX Planner; UI Skill Extractor after QA |
-| Non-trivial business logic | Unit Test Writer, including approved Test Plan |
-| Bug with an unknown root cause | Debug Agent before planning a fix |
+| New screen, critical UI flow, reusable UI component | UI/UX Planner + UI Skill Extractor after QA |
+| Non-trivial business logic | Unit Test Writer including approved Test Plan |
+| Bug with unknown root cause | Debug Agent before planning a fix |
 
-A required stage may be skipped only when the human accepts the risk and the reason is recorded in `status.md`.
+---
 
-### Re-verification
+## Re-verification Loop
 
-Every finding receives an ID in `status.md` (`QA-001`, `SEC-001`, `PERF-001`, and so on). After the Executor fixes an approved finding, QA must run regression verification. A Critical finding also requires re-check by the specialist who reported it. Findings close only as `Fixed`, `Accepted risk`, or `Deferred`, with the decision recorded.
+Findings get IDs (`QA-001`, `SEC-001`, `PERF-001`). Executor fixes only approved findings. QA verifies the regression. Critical findings are re-checked by the specialist who reported them. A finding closes only as `Fixed`, `Accepted risk`, or `Deferred` — with the decision recorded in `status.md`.
 
-Each agent refuses to do work outside its scope (e.g., the Planner refuses to write code, QA refuses to approve without reading the actual code, Unit Test Writer never generates test code without an approved Test Plan) — this is intentional, so each stage remains an independent check on the previous one.
+---
+
+## Why separate agents?
+
+A single prompt doing everything is how you get hallucinated architecture, skipped security checks, and a QA that approves its own output. Separating the roles forces each stage to be an independent check on the previous one.
+
+Narrow scope also means more reliable output from cheaper models. The Executor follows a spec — it doesn't need heavy reasoning. The Planner and reviewers need judgment — allocate accordingly.
+
+Every agent can be called independently. Need only a security audit? Run Security Review. Already have a spec? Start at Executor. Already have code? Start at QA.
+
+---
+
+## How to use
+
+1. Pick a mode and record it in `status.md`.
+2. **Large PRD?** Decomposer first — break into `task-N.md`, review, then continue.
+3. **Planner** — describe the feature. Get `prd.md`.
+4. **Doubt Review** — if the spec touches anything risky.
+5. **Executor** — implements per spec, one step at a time.
+6. **Unit Test Writer** — for non-trivial logic: Test Plan → approval → test code.
+7. **QA** — full verification with recorded evidence.
+8. **Specialist reviews** — as required by routing table.
+9. **Documentation + Skill Extractor** — close the loop after all findings are resolved.
