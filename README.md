@@ -75,6 +75,23 @@ Does not trigger for: commit messages, one-liners, `cat file`, SQL one-offs, tra
 
 ---
 
+## 🤝 Pairs well with: anti-slop
+
+HITL·Work gives your agents structure. [anti-slop](https://github.com/miqdadbadjuber/anti-slop) gives their output taste: it filters generic AI-generated code, UI, and copy.
+
+The pairing is opt-in and handled automatically. On the first run in a project, HITL·Work checks whether the anti-slop skill is installed:
+
+- **Installed** → the QA and Documentation agents read its rules and add an explicit slop check to their verdicts.
+- **Not installed** → the agent stops and asks you first (`yes` / `yes, always` / `no` / `never ask again`). Nothing is ever installed silently, and your answer is saved (`.hitl-work/preferences.md` per project, `~/.hitl-work/preferences.md` global) so you are only asked once.
+
+Install it manually any time:
+
+```bash
+npx skills add miqdadbadjuber/anti-slop
+```
+
+---
+
 ## Agents
 
 ### Core Pipeline
