@@ -73,6 +73,22 @@ The user explicitly chooses the mode. Before any agent runs: STOP, present all t
 
 **Quick Change Record** must state: target file, exact intended change, expected behavior, rollback method, and why the change is eligible for Quick mode. Executor stops and escalates to Standard or Full if the actual code contradicts that record.
 
+## Execution Mode
+
+Controls agent-to-agent handoffs, independent of the workflow mode above.
+
+- **Manual (default):** stop at every HITL checkpoint and wait for human confirmation before invoking the next agent.
+- **Auto:** chain through the pipeline continuously without confirmation at handoffs: Decomposer → Planner → required reviews → Executor → tests → QA → Documentation.
+
+Auto is strictly opt-in: never default to it and never prompt the user to choose it. Switch to auto only when the user explicitly requests it ("jalanin auto", "auto mode", "gas terus tanpa konfirmasi", or equivalent). The user may switch execution mode mid-pipeline; record the change in `status.md`. Record the execution mode in `status.md` alongside the workflow mode.
+
+Even in auto mode, STOP for a human when:
+- Specialist reviews contradict each other (the human arbitrates; see Conflicting findings).
+- The Executor hits ambiguity it cannot resolve from the spec (it never improvises).
+- QA issues FAIL with Critical findings, or the fix loop exceeds 3 consecutive FAIL rounds.
+- A mode escalation trigger appears (risk signal, or scope exceeding the selected mode).
+- Any finding would be closed as `Accepted risk` (a human decision by definition).
+
 ## Lean Code Discipline
 
 HITL·Work wraps code in a lot of process. These values keep the code itself lean. They were adapted from an audit of ponytail (https://github.com/DietrichGebert/ponytail, MIT). No external skill is required: the values below are native HITL·Work rules.
@@ -131,7 +147,7 @@ If your context was compacted, the session restarted, or you are picking up exis
 1. **Read the agent file before acting.** Never summarize from memory.
 2. **Follow each agent's process exactly.** Boundaries are intentional.
 3. **Respect the selected mode.** Full Pipeline requires Planner and QA; Standard requires Planner Lite and QA; Quick may skip Planner only with a recorded Quick Change Record and minimal QA. Don't skip QA to ship.
-4. **HITL checkpoints:**
+4. **HITL checkpoints (manual mode; auto mode chains through without stopping):**
    - After Decomposer -> stop, human reviews task list.
    - After Planner -> optionally run Doubt Review.
    - After Executor -> optionally run Unit Test Writer (recommended for non-trivial logic).
